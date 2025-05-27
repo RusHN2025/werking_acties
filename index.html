@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Werking van Acties in HappyOne - Instructie & Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: #f5f6fa;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #007bff;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .section-title-alt { /* Voor sub-secties */
+            font-size: 1.8em;
+            color: #0069d9; 
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0069d9;
+            padding-left: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #0056b3;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        h3::before {
+            content: "📋";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            color: #495057;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p, li {
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        ul {
+            margin: 15px 0 15px 25px;
+        }
+        
+        ul.fields-list li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #007bff;
+            background-color: #f8f9fa;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 4px;
+        }
+        ul.fields-list strong {
+            color: #0056b3;
+        }
+
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .concept-box h4 {
+            color: #0056b3;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .concept-box h4::before {
+            content: "💡";
+            margin-right: 8px;
+        }
+
+        .step-container { /* Minder prominent voor dit document, meer als info blokken */
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning-box strong {
+             color: #856404;
+        }
+        
+        .warning-box ul {
+            margin-top:10px;
+            margin-bottom: 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .info-box {
+            background: #e2f3ff;
+            border: 1px solid #b8dfff;
+            border-left: 5px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-box strong {
+            color: #004085;
+        }
+        .info-box::before {
+            content: "ℹ️ ";
+            font-weight: bold;
+            color: #004085;
+        }
+
+
+        .quiz {
+            display: none;
+        }
+
+        .quiz.active {
+            display: block;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .options button {
+            display: block; /* Knoppen onder elkaar voor betere leesbaarheid */
+            width: 100%; /* Volledige breedte */
+            text-align: left;
+            margin: 8px 0; /* Aanpassing marge */
+            padding: 15px 20px; /* Aanpassing padding */
+            font-size: 1.05em; /* Iets kleinere font-size voor meer tekst */
+            color: white;
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        .options button:hover {
+            transform: translateY(-2px) translateX(2px); /* Subtiele hover animatie */
+            box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
+        }
+
+        .options button.correct {
+            background: #28a745 !important;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .options button.wrong {
+            background: #dc3545 !important;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .options button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            font-size: 2em;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .feedback.good {
+            color: #28a745;
+        }
+
+        .feedback.wrong {
+            color: #dc3545;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .navigation button {
+            padding: 12px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 10px;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .navigation button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .results-section p {
+            font-size: 1.8em;
+            margin: 20px 0;
+            color: #495057;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Werking van Acties in HappyOne</h1>
+        <p>Handleiding voor effectief taakbeheer en interactieve quiz</p>
+    </header>
+
+    <!-- Instructie Sectie -->
+    <section id="instruction-section">
+        <h2>📚 Instructiegids: Acties in HappyOne</h2>
+        
+        <div class="concept-box">
+            <h4>Wat zijn Acties?</h4>
+            <p>In HappyOne zijn acties taken of herinneringen die helpen bij het opvolgen van werkzaamheden. Ze zorgen ervoor dat belangrijke stappen in processen niet over het hoofd worden gezien. Er zijn twee hoofdtypen: automatische en handmatige acties.</p>
+        </div>
+
+        <h2 class="section-title-alt">🤖 Automatische Acties</h2>
+        <div class="step-container">
+            <p>Een <span class="highlight">automatische actie</span> wordt door HappyOne zelf aangemaakt op specifieke momenten. Dit gebeurt bijvoorbeeld:</p>
+            <ul>
+                <li>Wanneer een sollicitant het registratieformulier heeft ingediend.</li>
+                <li>Als een kredietcheck door de afdeling Debiteuren is afgerond.</li>
+                <li>Wanneer een screeningsdocument binnenkort dreigt te verlopen.</li>
+            </ul>
+            <p>Een volledig overzicht van alle automatisch aangemaakte acties is te vinden in de werkinstructie <span class="highlight">‘Welke acties worden automatisch aangemaakt’</span>.</p>
+        </div>
+
+        <h2 class="section-title-alt">✍️ Handmatige Acties</h2>
+        <div class="step-container">
+            <p>Een <span class="highlight">handmatige actie</span> kan door een gebruiker zelf worden aangemaakt vanuit verschillende dossiers:</p>
+            <ul>
+                <li>Sollicitant (met uitzondering van ‘vanuit RecruitNow’)</li>
+                <li>Flexwerker</li>
+                <li>Suspect</li>
+                <li>Prospect</li>
+                <li>Klant</li>
+            </ul>
+            
+            <h3>Een Handmatige Actie Toevoegen</h3>
+            <p>Aan de rechterkant in een dossier vind je de sectie <span class="highlight">‘Acties’</span>. Klik op het <span class="highlight">‘+-teken’</span> om een nieuwe actie toe te voegen. Vul de volgende velden in:</p>
+            <ul class="fields-list">
+                <li><strong>Actie voor:</strong> De naam van de betreffende sollicitant, flexwerker, etc. wordt hier automatisch ingevuld.</li>
+                <li><strong>Titel:</strong> Geef een duidelijke en pakkende titel voor de actie.</li>
+                <li><strong>Omschrijving:</strong> Voeg eventueel een gedetailleerdere omschrijving toe.</li>
+                <li><strong>Eigenaar:</strong> Je eigen naam wordt automatisch ingevuld. Je kunt de actie ook toewijzen aan een gebruiker van een andere gekoppelde vestiging.</li>
+                <li><strong>Vestiging:</strong> De vestiging van het dossier wordt automatisch ingevuld. Indien gekoppeld aan meerdere vestigingen, kun je een andere selecteren.</li>
+                <li><strong>Einddatum:</strong> Selecteer de datum waarop de actie uiterlijk uitgevoerd moet zijn.</li>
+            </ul>
+            <p>Na het toevoegen wordt de actie vastgelegd in het betreffende dossier.</p>
+        </div>
+        
+        <div class="warning-box">
+            <strong>Belangrijke punten bij handmatige acties:</strong>
+            <ul>
+                <li>Het is mogelijk om acties toe te voegen aan klanten/flexwerkers van <strong>alle</strong> vestigingen.</li>
+                <li>Acties kunnen alleen worden verwijderd door degene die de actie heeft aangemaakt, een collega van dezelfde vestiging, of admin gebruikers.</li>
+                <li>Het is <span class="highlight">niet mogelijk</span> om acties in het verleden aan te maken (d.w.z. met een einddatum die al voorbij is).</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title-alt">📊 Widget ‘Acties’</h2>
+        <div class="step-container">
+            <p>De widget <span class="highlight">‘Acties’</span> op je dashboard toont een overzicht van al je openstaande acties, zowel handmatige als automatische. Binnen deze widget kun je:</p>
+            <ul>
+                <li><strong>Filters toepassen:</strong> Om je actielijst te verfijnen.</li>
+                <li><strong>Een actie aanmaken:</strong> Via de knop ‘Actie toevoegen’. Let op: een actie die vanuit de widget wordt aangemaakt, is <span class="highlight">niet gekoppeld</span> aan een specifiek dossier.</li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title-alt">🔔 Notificaties en Afhandeling</h2>
+        <div class="step-container">
+             <h3>Notificatie van Nieuwe/Openstaande Acties</h3>
+            <p>Je wordt genotificeerd van nieuwe of openstaande acties via het <span class="highlight">‘belletje’</span> rechtsboven in je scherm. Een klik hierop opent direct de widget ‘Acties’.</p>
+
+            <h3>Acties Afwikkelen</h3>
+            <p>Je kunt een actie afhandelen (markeren als voltooid) door in de actielijst (in een dossier of in de widget) op de <span class="highlight">selectiebox</span> vóór de betreffende actie te klikken.</p>
+
+            <h3>Acties Verwijderen</h3>
+            <p>Om een actie permanent te verwijderen, ga je in de widget ‘Acties’ naar de betreffende actie en klik je op de <span class="highlight">3 verticale puntjes</span> erachter. Kies vervolgens voor <span class="highlight">‘Actie verwijderen’</span>.</p>
+            
+            <h3>Acties Exporteren</h3>
+            <p>Vanuit de widget ‘Acties’ kun je de getoonde actielijst exporteren naar een <span class="highlight">.xlsx (Excel) bestand</span> door te kiezen voor ‘Acties exporteren’.</p>
+        </div>
+
+    </section>
+
+    <!-- Quiz Sectie -->
+    <section id="quiz-section">
+        <h2>🎯 Toets je Kennis</h2>
+        <div id="quiz-1" class="quiz active">
+            <div class="question">Welke twee hoofdtypen acties onderscheiden we in HappyOne?</div>
+            <div class="options">
+                <button onclick="handleQuizAnswer(this, false)">Alleen taken die je zelf invoert.</button>
+                <button onclick="handleQuizAnswer(this, true)">Automatische acties en handmatige acties.</button>
+                <button onclick="handleQuizAnswer(this, false)">Acties voor sollicitanten en acties voor klanten.</button>
+                <button onclick="handleQuizAnswer(this, false)">Verlopen acties en openstaande acties.</button>
+            </div>
+            <div id="feedback-quiz-1" class="feedback"></div>
+            <div class="navigation">
+                <button onclick="nextQuiz(2)">Volgende Vraag</button>
+            </div>
+        </div>
+
+        <div id="quiz-2" class="quiz">
+            <div class="question">Als je een handmatige actie aanmaakt, welk veld wordt dan standaard met jouw eigen naam gevuld?</div>
+            <div class="options">
+                <button onclick="handleQuizAnswer(this, false)">Titel</button>
+                <button onclick="handleQuizAnswer(this, false)">Actie voor</button>
+                <button onclick="handleQuizAnswer(this, true)">Eigenaar</button>
+                <button onclick="handleQuizAnswer(this, false)">Vestiging</button>
+            </div>
+            <div id="feedback-quiz-2" class="feedback"></div>
+            <div class="navigation">
+                <button onclick="prevQuiz(1)">Vorige Vraag</button>
+                <button onclick="nextQuiz(3)">Volgende Vraag</button>
+            </div>
+        </div>
+        
+        <div id="quiz-3" class="quiz">
+            <div class="question">Wat is een belangrijk verschil tussen een handmatige actie aangemaakt vanuit een dossier en een actie aangemaakt vanuit de widget 'Acties'?</div>
+            <div class="options">
+                <button onclick="handleQuizAnswer(this, false)">Acties vanuit de widget kunnen geen einddatum hebben.</button>
+                <button onclick="handleQuizAnswer(this, true)">Een actie aangemaakt vanuit de widget 'Acties' is niet gekoppeld aan een specifiek dossier.</button>
+                <button onclick="handleQuizAnswer(this, false)">Alleen admins kunnen acties aanmaken vanuit de widget.</button>
+                <button onclick="handleQuizAnswer(this, false)">Acties vanuit de widget zijn altijd automatisch.</button>
+            </div>
+            <div id="feedback-quiz-3" class="feedback"></div>
+            <div class="navigation">
+                <button onclick="prevQuiz(2)">Vorige Vraag</button>
+                <button onclick="nextQuiz(4)">Volgende Vraag</button>
+            </div>
+        </div>
+
+        <div id="quiz-4" class="quiz">
+            <div class="question">Wie kan een handmatige actie NIET standaard verwijderen?</div>
+            <div class="options">
+                <button onclick="handleQuizAnswer(this, false)">Degene die de actie heeft aangemaakt.</button>
+                <button onclick="handleQuizAnswer(this, true)">Een collega van een andere vestiging (tenzij admin).</button>
+                <button onclick="handleQuizAnswer(this, false)">Een collega van dezelfde vestiging.</button>
+                <button onclick="handleQuizAnswer(this, false)">Een admin gebruiker.</button>
+            </div>
+            <div id="feedback-quiz-4" class="feedback"></div>
+            <div class="navigation">
+                <button onclick="prevQuiz(3)">Vorige Vraag</button>
+                <button onclick="showResults()">Resultaat Tonen</button>
+            </div>
+        </div>
+
+        <div id="quiz-results" class="quiz">
+            <div class="results-section">
+                <h2>🏆 Resultaten</h2>
+                <p id="result-text"></p>
+                <div class="navigation">
+                    <button onclick="restartQuiz()">Opnieuw Proberen</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    let correctAnswers = 0;
+    const totalQuestions = 4; // Aangepast naar het aantal vragen
+
+    function handleQuizAnswer(button, correct) {
+        const parent = button.parentElement;
+        const feedback = parent.nextElementSibling; // feedback-quiz-X div
+
+        parent.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+        if (correct) {
+            correctAnswers++;
+            button.classList.add('correct');
+            feedback.textContent = 'Goed 🎉';
+            feedback.className = 'feedback good';
+        } else {
+            button.classList.add('wrong');
+            feedback.textContent = 'Fout 🚫';
+            feedback.className = 'feedback wrong';
+        }
+    }
+
+    function navigateToQuiz(quizIdToShow) {
+        document.querySelectorAll('.quiz').forEach(quizDiv => {
+            quizDiv.classList.remove('active');
+        });
+        const targetQuiz = document.getElementById(quizIdToShow);
+        if (targetQuiz) {
+            targetQuiz.classList.add('active');
+        }
+    }
+
+    function nextQuiz(quizNumber) {
+        navigateToQuiz(`quiz-${quizNumber}`);
+    }
+
+    function prevQuiz(quizNumber) {
+        navigateToQuiz(`quiz-${quizNumber}`);
+    }
+
+    function showResults() {
+        const percentage = totalQuestions > 0 ? ((correctAnswers / totalQuestions) * 100).toFixed(0) : 0;
+        document.getElementById('result-text').textContent = `Je hebt ${correctAnswers} van de ${totalQuestions} vragen goed beantwoord (${percentage}%).`;
+        navigateToQuiz('quiz-results');
+    }
+
+    function restartQuiz() {
+        correctAnswers = 0;
+        document.querySelectorAll('.options button').forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('correct', 'wrong');
+        });
+        document.querySelectorAll('.feedback').forEach(fb => {
+            fb.textContent = '';
+            // Zorg ervoor dat de class weer neutraal is als je 'good'/'wrong' direct op feedback div zet
+            fb.className = 'feedback'; 
+        });
+        navigateToQuiz('quiz-1');
+    }
+
+    // Zorg dat de eerste quiz zichtbaar is bij het laden
+    document.addEventListener('DOMContentLoaded', () => {
+        navigateToQuiz('quiz-1');
+    });
+</script>
+
+</body>
+</html>
